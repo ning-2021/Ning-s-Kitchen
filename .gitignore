@@ -37,3 +37,8 @@ build/
 
 ### Configuration ###
 .env
+
+### Data ###
+*.csv
+*.txt
+
