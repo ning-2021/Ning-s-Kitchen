@@ -26,6 +26,7 @@ public class TestConnect {
     public static Connection getConnection() throws SQLException {
         return ds.getConnection();
     }
+
     public static void main(String[] args) {
         try (Connection conn = getConnection()) {
             if (conn != null) {

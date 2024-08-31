@@ -6,4 +6,5 @@ package org.example.enums;
 public interface TableCols {
     String getColumnName();
     int getColumnIndex();
+    int getColumnType();
 }
