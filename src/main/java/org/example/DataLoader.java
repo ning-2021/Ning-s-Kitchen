@@ -4,14 +4,57 @@ import org.example.enums.*;
 
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.sql.*;
+import java.util.Arrays;
 
 import com.opencsv.CSVReader;
 import org.postgresql.util.PGobject;
-
+import io.github.cdimascio.dotenv.Dotenv;
 
 // use the TableCols interface to handle different enums dynamically
 public class DataLoader {
+    static Dotenv dotenv = Dotenv.load();
+
+    // check if a table already being created
+    private static boolean checkTableExistence(String tableName) {
+        try (Connection conn = TestConnect.getConnection()) {
+            DatabaseMetaData dbm = conn.getMetaData();
+            ResultSet rs = dbm.getTables(null, null, tableName, null);
+            return rs.next();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    // execute schema.sql file
+    public static void executeSqlSchema(String sqlFilePath) {
+        String allTableString = dotenv.get("ALL_TABLES");
+        String[] tableNames = allTableString.split(",");
+        System.out.println(Arrays.toString(tableNames));
+        boolean allExistence = true;
+        for (String tableName: tableNames) {
+            if (!checkTableExistence(tableName)) {
+                allExistence = false;
+            }
+        }
+        if (!allExistence) {
+            try (Connection conn = TestConnect.getConnection();
+                 Statement stmt = conn.createStatement()) {
+                // read the .sql file into a string
+                String sqlString = new String(Files.readAllBytes(Paths.get(sqlFilePath)));
+                // execute all SQL statements inside .sql file
+                stmt.execute(sqlString);
+                System.out.println("Schema created successfully!");
+            } catch (IOException | SQLException e) {
+                throw new RuntimeException(e);
+            }
+        } else {
+            System.out.println("All tables already exist, skip the execution.");
+        }
+    }
 
     // dynamically build the SQL INSERT statement using column names and indices provided by TableCols interface
     public static void loadCsvToTable(String csvFilePath, String tableName, TableCols[] columns) {
@@ -82,6 +125,7 @@ public class DataLoader {
     }
 
     public static void main(String[] args) {
-        loadCsvToTable("src/main/resources/data/recipes.csv", "recipes", RecipeCols.values());
+        executeSqlSchema("src/main/resources/schema.sql");
+//        loadCsvToTable("src/main/resources/data/recipes.csv", "recipes", RecipeCols.values());
     }
 }

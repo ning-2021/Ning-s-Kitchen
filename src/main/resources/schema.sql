@@ -1,4 +1,4 @@
-CREATE TABLE recipes (
+CREATE TABLE IF NOT EXISTS recipes (
   id SERIAL PRIMARY KEY,
   title VARCHAR(150) NOT NULL,
   description VARCHAR(300),
@@ -9,46 +9,46 @@ CREATE TABLE recipes (
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE ingredients (
+CREATE TABLE IF NOT EXISTS  ingredients (
   id SERIAL PRIMARY KEY,
-  name VARCHAR(50) NOT NULL,
+  name VARCHAR(50) NOT NULL
 );
 
-CREATE TABLE recipes_ingredients (
+CREATE TABLE IF NOT EXISTS  recipes_ingredients (
   ingredient_id INT NOT NULL REFERENCES ingredients(id),
   recipe_id INT NOT NULL REFERENCES recipes(id),
   PRIMARY KEY (ingredient_id, recipe_id)
 );
 
-CREATE TABLE types (
+CREATE TABLE IF NOT EXISTS  types (
   id SERIAL PRIMARY KEY,
   name VARCHAR(50) UNIQUE NOT NULL
 );
 
-CREATE TABLE tags (
+CREATE TABLE IF NOT EXISTS  tags (
   id SERIAL PRIMARY KEY,
   name VARCHAR(50) NOT NULL,
   type_id INT NOT NULL REFERENCES types(id)
 );
 
-CREATE TABLE recipes_tags (
+CREATE TABLE IF NOT EXISTS  recipes_tags (
   recipe_id INT NOT NULL REFERENCES recipes(id),
   tag_id INT NOT NULL REFERENCES tags(id),
   PRIMARY KEY (recipe_id, tag_id)
 );
 
-CREATE TABLE categories (
+CREATE TABLE IF NOT EXISTS  categories (
   id SERIAL PRIMARY KEY,
   name VARCHAR(50) NOT NULL
 );
 
-CREATE TABLE ingredients_categories (
+CREATE TABLE IF NOT EXISTS  ingredients_categories (
   ingredient_id INT NOT NULL REFERENCES ingredients(id),
   category_id INT NOT NULL REFERENCES categories(id),
   PRIMARY KEY (ingredient_id, category_id)
 );
 
-CREATE TABLE users (
+CREATE TABLE IF NOT EXISTS  users (
   id SERIAL PRIMARY KEY,
   username VARCHAR(30) NOT NULL UNIQUE,
   email VARCHAR(255) NOT NULL UNIQUE,
@@ -57,7 +57,7 @@ CREATE TABLE users (
   profile_picture TEXT
 );
 
-CREATE TABLE reviews (
+CREATE TABLE IF NOT EXISTS  reviews (
   id SERIAL PRIMARY KEY,
   user_id INT NOT NULL REFERENCES users(id),
   recipe_id INT NOT NULL REFERENCES recipes(id),
