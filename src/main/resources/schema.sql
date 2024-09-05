@@ -3,7 +3,7 @@ CREATE TABLE IF NOT EXISTS recipes (
   title VARCHAR(150) NOT NULL,
   description VARCHAR(300),
   instructions JSONB DEFAULT '{}',
-  rating NUMERIC(3,2) CHECK (rating >= 1.0 AND rating <= 5.0),
+  rating NUMERIC(3,2) CHECK (rating >= 0.0 AND rating <= 5.0),
   image TEXT,
   duration INT NOT NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
