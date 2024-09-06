@@ -1,19 +1,18 @@
 package org.example.enums;
 
-public interface BaseColumnEnum extends TableCols{
+public interface BaseColumnEnum {
     ColumnInfo getColumnInfo();
 
-    @Override
     default String getColumnName() {
-        return getColumnInfo().getColumnName();
-    }
-    @Override
-    default int getColumnIndex() {
-        return getColumnInfo().getColumnIndex();
+        return getColumnInfo().columnName();
     }
 
-    @Override
+    default int getColumnIndex() {
+        return getColumnInfo().columnIndex();
+    }
+
+
     default int getColumnType() {
-        return getColumnInfo().getColumnType();
+        return getColumnInfo().columnType();
     }
 }

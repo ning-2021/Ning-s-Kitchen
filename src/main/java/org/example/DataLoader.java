@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.sql.*;
-//import java.util.Arrays;
 
 import com.opencsv.CSVReader;
 import org.postgresql.util.PGobject;
@@ -56,19 +55,19 @@ public class DataLoader {
     }
 
     // dynamically build the SQL INSERT statement using column names and indices provided by TableCols interface
-    public static void loadCsvToTable(String csvFilePath, String tableName, TableCols[] columns) {
+    public static void loadCsvToTable(String csvFilePath, String tableName, BaseColumnEnum[] columns) {
         try (Connection conn = TestConnect.getConnection();
              CSVReader reader = new CSVReader(new FileReader(csvFilePath))) {
             // build the SQL statement dynamically based on the column mapping
             // example: INSERT INTO recipes (id, title, description, instructions, rating, image, duration, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT (id) DO NOTHING
             StringBuilder insertBuilder = new StringBuilder("INSERT INTO ");
             insertBuilder.append(tableName).append("(");
-            for (TableCols column: columns) {
+            for (BaseColumnEnum column: columns) {
                 insertBuilder.append(column.getColumnName()).append(", ");
             }
             insertBuilder.delete(insertBuilder.length() - 2, insertBuilder.length());
             insertBuilder.append(") VALUES (");
-            for (TableCols column: columns) {
+            for (BaseColumnEnum column: columns) {
                 insertBuilder.append("?, ");
             }
             insertBuilder.delete(insertBuilder.length() - 2, insertBuilder.length());
@@ -80,7 +79,7 @@ public class DataLoader {
             try (PreparedStatement pstmt = conn.prepareStatement(sqlInsert)) {
                 String[] nextLine = reader.readNext();
                 while ((nextLine = reader.readNext()) != null) {
-                    for (TableCols column: columns) {
+                    for (BaseColumnEnum column: columns) {
                         int colIndex = column.getColumnIndex();
                         int colType = column.getColumnType();
                         int paramIndex = colIndex + 1;
