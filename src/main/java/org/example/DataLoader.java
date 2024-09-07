@@ -126,5 +126,9 @@ public class DataLoader {
     public static void main(String[] args) {
         executeSqlSchema("src/main/resources/schema.sql");
         loadCsvToTable("src/main/resources/data/recipes.csv", "recipes", RecipeCols.values());
+        loadCsvToTable("src/main/resources/data/categories.csv", "categories", CategoryCols.values());
+        loadCsvToTable("src/main/resources/data/types.csv", "types", TypeCols.values());
+        loadCsvToTable("src/main/resources/data/tags.csv", "tags", TagCols.values());
+        loadCsvToTable("src/main/resources/data/ingredients.csv", "ingredients", IngredientCols.values());
     }
 }
