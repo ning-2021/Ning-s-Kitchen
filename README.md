@@ -26,7 +26,7 @@ The Ning's Kitchen is a web application designed to provide personalized recipe 
 ## Database Schema
 The following diagram illustrates the structure of my database:
 
-![SQL Schema](https://github.com/user-attachments/assets/4b2b887d-48c5-439e-9196-e299d05df61f)
+![SQL Schema](./src/main/resources/image/schema.png)
 
 
 ## Installation
