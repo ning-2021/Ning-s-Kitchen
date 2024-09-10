@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.sql.*;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.opencsv.CSVReader;
 import org.postgresql.util.PGobject;
@@ -15,6 +17,17 @@ import io.github.cdimascio.dotenv.Dotenv;
 // use the TableCols interface to handle different enums dynamically
 public class DataLoader {
     static Dotenv dotenv = Dotenv.load();
+    static Map<String, String> pKeys = new HashMap<>();
+
+    public static void primaryKeys() {
+        pKeys.put("categories", "id");
+        pKeys.put("ingredients", "id");
+        pKeys.put("recipes", "id");
+        pKeys.put("tags", "id");
+        pKeys.put("types", "id");
+        pKeys.put("recipes_ingredients", "recipe_id, ingredient_id");
+        pKeys.put("recipes_tags", "recipe_id, tag_id");
+    }
 
     // check if a table already being created
     private static boolean checkTableExistence(String tableName) {
@@ -56,6 +69,7 @@ public class DataLoader {
 
     // dynamically build the SQL INSERT statement using column names and indices provided by TableCols interface
     public static void loadCsvToTable(String csvFilePath, String tableName, BaseColumnEnum[] columns) {
+
         try (Connection conn = TestConnect.getConnection();
              CSVReader reader = new CSVReader(new FileReader(csvFilePath))) {
             // build the SQL statement dynamically based on the column mapping
@@ -72,7 +86,9 @@ public class DataLoader {
             }
             insertBuilder.delete(insertBuilder.length() - 2, insertBuilder.length());
             insertBuilder.append(")");
-            insertBuilder.append(" ON CONFLICT (id) DO NOTHING");
+            insertBuilder.append(" ON CONFLICT (");
+            insertBuilder.append(pKeys.get(tableName));
+            insertBuilder.append(") DO NOTHING");
             String sqlInsert = insertBuilder.toString();
 
             // read rows from the csv file and insert into the table
@@ -125,10 +141,13 @@ public class DataLoader {
 
     public static void main(String[] args) {
         executeSqlSchema("src/main/resources/schema.sql");
+        primaryKeys();
         loadCsvToTable("src/main/resources/data/recipes.csv", "recipes", RecipeCols.values());
         loadCsvToTable("src/main/resources/data/categories.csv", "categories", CategoryCols.values());
         loadCsvToTable("src/main/resources/data/types.csv", "types", TypeCols.values());
         loadCsvToTable("src/main/resources/data/tags.csv", "tags", TagCols.values());
         loadCsvToTable("src/main/resources/data/ingredients.csv", "ingredients", IngredientCols.values());
+        loadCsvToTable("src/main/resources/data/recipes_ingredients.csv", "recipes_ingredients", RecipeIngredientCols.values());
+        loadCsvToTable("src/main/resources/data/recipes_tags.csv", "recipes_tags", RecipeTagCols.values());
     }
 }
