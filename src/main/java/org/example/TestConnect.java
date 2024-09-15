@@ -4,10 +4,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import io.github.cdimascio.dotenv.Dotenv;
 import org.apache.commons.dbcp2.BasicDataSource;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 
-@Configuration
 // establish a connection to the database
 public class TestConnect {
     static Dotenv dotenv = Dotenv.load();
