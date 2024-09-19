@@ -4,8 +4,11 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import io.github.cdimascio.dotenv.Dotenv;
 import org.apache.commons.dbcp2.BasicDataSource;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 // establish a connection to the database
+@Configuration
 public class TestConnect {
     static Dotenv dotenv = Dotenv.load();
     private final static String url = dotenv.get("DB_URL");
@@ -13,21 +16,19 @@ public class TestConnect {
     private final static String password = dotenv.get("DB_PASS");
     private static final BasicDataSource ds = new BasicDataSource();
 
-    static {
+    @Bean
+    public static BasicDataSource dataSource() {
         ds.setUrl(url);
         ds.setUsername(user);
         ds.setPassword(password);
         ds.setMinIdle(5);
         ds.setMaxIdle(10);
         ds.setMaxOpenPreparedStatements(100);
-    }
-
-    public static Connection getConnection() throws SQLException {
-        return ds.getConnection();
+        return ds;
     }
 
     public static void main(String[] args) {
-        try (Connection conn = getConnection()) {
+        try (Connection conn = ds.getConnection()) {
             if (conn != null) {
                 System.out.println("Successfully connected to the database!");
             } else {

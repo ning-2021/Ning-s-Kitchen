@@ -31,7 +31,7 @@ public class DataLoader {
 
     // check if a table already being created
     private static boolean checkTableExistence(String tableName) {
-        try (Connection conn = TestConnect.getConnection()) {
+        try (Connection conn = TestConnect.dataSource().getConnection()) {
             DatabaseMetaData dbm = conn.getMetaData();
             ResultSet rs = dbm.getTables(null, null, tableName, null);
             return rs.next();
@@ -52,7 +52,7 @@ public class DataLoader {
             }
         }
         if (!allExistence) {
-            try (Connection conn = TestConnect.getConnection();
+            try (Connection conn = TestConnect.dataSource().getConnection();
                  Statement stmt = conn.createStatement()) {
                 // read the .sql file into a string
                 String sqlString = new String(Files.readAllBytes(Paths.get(sqlFilePath)));
@@ -70,7 +70,7 @@ public class DataLoader {
     // dynamically build the SQL INSERT statement using column names and indices provided by TableCols interface
     public static void loadCsvToTable(String csvFilePath, String tableName, BaseColumnEnum[] columns) {
 
-        try (Connection conn = TestConnect.getConnection();
+        try (Connection conn = TestConnect.dataSource().getConnection();
              CSVReader reader = new CSVReader(new FileReader(csvFilePath))) {
             // build the SQL statement dynamically based on the column mapping
             // example: INSERT INTO recipes (id, title, description, instructions, rating, image, duration, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT (id) DO NOTHING

@@ -10,17 +10,16 @@ import java.util.List;
 @RequestMapping
 public class RecipeController {
     private final RecipeService recipeService;
-
     public RecipeController(RecipeService recipeService) {
         this.recipeService = recipeService;
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/recipes/{id}")
     public Recipe fetchRecipeById(@PathVariable  Long id) {
         return recipeService.findRecipeById(id);
     }
 
-    @GetMapping
+    @GetMapping("/recipes")
     public List<Recipe> fetchAllRecipes() {
         return recipeService.findAllRecipes();
     }
@@ -30,12 +29,12 @@ public class RecipeController {
         return recipeService.addRecipe(recipe);
     }
 
-    @PutMapping("/{id}")
-    public int alterRecipe(@PathVariable Long id, @RequestBody Recipe recipe) {
+    @PutMapping("/recipes/{id}")
+    public int alterRecipe(@PathVariable("id") Long id, @RequestBody Recipe recipe) {
         return recipeService.modifyRecipe(id, recipe);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/recipes/{id}")
     public int dropRecipe(@PathVariable Long id) {
         return recipeService.removeRecipe(id);
     }
