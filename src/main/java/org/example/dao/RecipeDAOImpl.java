@@ -22,9 +22,9 @@ public class RecipeDAOImpl implements RecipeDAO {
         return jdbc.queryForObject(findRecipeSql, new RecipeMapper(), id);
     }
 
-    public List<Recipe> getAllRecipes(Recipe recipe) {
+    public List<Recipe> getAllRecipes() {
         String getAllRecipesSql = "SELECT * FROM recipes";
-        return Collections.singletonList(jdbc.queryForObject(getAllRecipesSql, new RecipeMapper()));
+        return jdbc.query(getAllRecipesSql, new RecipeMapper());
     }
 
     public int deleteRecipe(Long id) {
@@ -32,14 +32,14 @@ public class RecipeDAOImpl implements RecipeDAO {
         return jdbc.update(deleteRecipeSql, id);
     }
 
-    public int updateRecipe(Long id) {
+    public int updateRecipe(Long id, Recipe recipe) {
         String updateRecipeSql = "UPDATE recipes SET title = ?, description = ?, instructions = ?, rating = ?, image = ?, duration = ?, created_at = ? WHERE id = ?";
-        return jdbc.update(updateRecipeSql, id);
+        return jdbc.update(updateRecipeSql, recipe.getTitle(), recipe.getDescription(), recipe.getInstructions(), recipe.getRating(), recipe.getImage(), recipe.getDuration(), recipe.getCreated_at(), id);
     }
 
-    public int createRecipe(Long id) {
-        String insertRecipeSql = "INSERT INTO recipes(id, title, description, instructions, rating, image, duration, created_at) VALUES (?,?,?,?,?,?,?,?)";
-        return jdbc.update(insertRecipeSql, id);
+    public int createRecipe(Recipe recipe) {
+        String insertRecipeSql = "INSERT INTO recipes(title, description, instructions, rating, image, duration, created_at) VALUES (?,?,?,?,?,?,?,?)";
+        return jdbc.update(insertRecipeSql, recipe.getTitle(), recipe.getDescription(), recipe.getInstructions(), recipe.getRating(), recipe.getImage(), recipe.getDuration(), recipe.getCreated_at());
     }
 }
 
