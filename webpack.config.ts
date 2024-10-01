@@ -4,7 +4,7 @@ import 'webpack-dev-server';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 
 const config: webpack.Configuration = {
-  mode: 'production',
+  mode: 'development',
   entry: './src/index.tsx',
   output: {
     path: path.resolve(__dirname, 'dist'),
@@ -16,18 +16,17 @@ const config: webpack.Configuration = {
     ],
   },
   devServer: {
-    static: path.join(__dirname, 'dist'),
+    static: {
+        directory: path.join(__dirname, 'public'),
+        publicPath: '/',
+    },
     compress: true,
     port: 3000,
+    historyApiFallback: true,
   },
   resolve: {
     extensions: ['.ts', '.tsx', '.js'],
   },
-  plugins: [
-    new HtmlWebpackPlugin ({
-      template: './public/index.html',
-    }),
-  ],
 };
 
 export default config;
