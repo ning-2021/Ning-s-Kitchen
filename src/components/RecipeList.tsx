@@ -1,31 +1,19 @@
 import React from 'react';
-
-interface Recipe {
-  id: number;
-  title: string;
-  description: string;
-  instructions: string;
-  rating: number;
-  image: string;
-  duration: number;
-  created_at: string
-}
+import Recipe from './Recipe';
+import RecipeCard from './RecipeCard';
 
 interface RecipeListProps {
-  title: string;  // The section title like "Featured Recipes"
-  recipes: Recipe[];  // The list of recipes to display
+  title: string;
+  recipes: Recipe[];
 }
 
-const RecipeList: React.FC<RecipeListProps> = ({ title, recipes }) => {
+const RecipeList: React.FC<RecipeListProps> = (props) => {
+  const {title, recipes} = props;
   return (
     <div className="recipe-list">
-      <h2>{title}</h2> {/* Display the section title */}
+      <h2>{title}</h2>
       {recipes.map((recipe) => (
-        <div key={recipe.id} className="recipe-card">
-          <img src={recipe.image} alt={recipe.title} />
-          <h3>{recipe.title}</h3>
-          <p>{recipe.description}</p>
-        </div>
+        <RecipeCard recipe={recipe} />
       ))}
     </div>
   );

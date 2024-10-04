@@ -1,17 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import RecipeList from './RecipeList';
+import Recipe from './Recipe';
 
-interface Recipe {
-  id: number;
-  title: string;
-  description: string;
-  instructions: string;
-  rating: number;
-  image: string;
-  duration: number;
-  created_at: string
-}
 
 const RecipeMain: React.FC = () => {
   const [allRecipes, setAllRecipes] = useState<Recipe[]>([]);
@@ -38,7 +29,7 @@ const RecipeMain: React.FC = () => {
   const newestRecipes = [...allRecipes].sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()).slice(0, 5);
 
   return (
-    <div className="recipe-page">
+    <div className="recipe-main">
       <RecipeList title="Full Recipes" recipes={allRecipes} />
     </div>
   );
