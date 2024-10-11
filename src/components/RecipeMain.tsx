@@ -12,7 +12,7 @@ const RecipeMain: React.FC = () => {
   useEffect(() => {
     const fetchRecipes = async () => {
       try {
-        const response = await axios.get<Recipe[]>('http://192.168.86.17:8080/recipes');
+        const response = await axios.get<Recipe[]>('http://localhost:8080/recipes');
         setAllRecipes(response.data);
       } catch (err) {
         setError((err as Error).message);

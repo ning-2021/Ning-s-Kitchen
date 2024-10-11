@@ -1,0 +1,16 @@
+.recipe-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.recipe-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+}
+
+.recipe-card {
+  flex: 1;
+  max-width: calc(33.333% - 10px);
+}
