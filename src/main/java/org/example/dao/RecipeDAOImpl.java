@@ -17,8 +17,13 @@ public class RecipeDAOImpl implements RecipeDAO {
     }
 
     public Recipe getRecipeById(Long id) {
-        String findRecipeSql = "SELECT * FROM recipes WHERE id = ?";
-        return jdbc.queryForObject(findRecipeSql, new RecipeMapper(), id);
+        String getRecipeSql = "SELECT * FROM recipes WHERE id = ?";
+        return jdbc.queryForObject(getRecipeSql, new RecipeMapper(), id);
+    }
+
+    public List<Long> getRecipeIdByTagId(Long tag_id) {
+        String getRecipeIdByTagIdSql = "SELECT recipe_id FROM recipes_tags WHERE tag_id = ?";
+        return jdbc.queryForList(getRecipeIdByTagIdSql, Long.class, tag_id);
     }
 
     public List<Recipe> getAllRecipes() {

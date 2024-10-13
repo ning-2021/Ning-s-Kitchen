@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@CrossOrigin
+@CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping
 public class RecipeController {
     private final RecipeService recipeService;
@@ -16,8 +16,14 @@ public class RecipeController {
     }
 
     @GetMapping("/recipes/{id}")
-    public Recipe fetchRecipeById(@PathVariable  Long id) {
+    public Recipe fetchRecipeById(@PathVariable Long id) {
         return recipeService.findRecipeById(id);
+    }
+
+    @GetMapping("/recipes/ids")
+    public List<Long> fetchRecipeIdByTagId(@RequestParam("tag_id") Long tagId) {
+        System.out.println("Haha " + recipeService.findRecipeIdByTagId(tagId));
+        return recipeService.findRecipeIdByTagId(tagId);
     }
 
     @GetMapping("/recipes")

@@ -18,6 +18,8 @@ public class RecipeService {
         return recipeDAOImpl.getRecipeById(id);
     }
 
+    public List<Long> findRecipeIdByTagId(Long tag_id) { return recipeDAOImpl.getRecipeIdByTagId(tag_id); }
+
     public List<Recipe> findAllRecipes() {
         return recipeDAOImpl.getAllRecipes();
     }
