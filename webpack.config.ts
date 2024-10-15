@@ -2,6 +2,15 @@ import path from 'path';
 import webpack from 'webpack';
 import 'webpack-dev-server';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
+import dotenv from 'dotenv';
+
+// Load environment variables from .env file
+const env = dotenv.config().parsed;
+
+// Create a new Webpack define plugin
+const definePlugin = new webpack.DefinePlugin({
+  'process.env': JSON.stringify(env)
+});
 
 const config: webpack.Configuration = {
   mode: 'development',
@@ -27,6 +36,7 @@ const config: webpack.Configuration = {
   resolve: {
     extensions: ['.ts', '.tsx', '.js'],
   },
+  plugins: [definePlugin]
 };
 
 export default config;

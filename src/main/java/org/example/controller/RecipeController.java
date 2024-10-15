@@ -22,7 +22,6 @@ public class RecipeController {
 
     @GetMapping("/recipes/ids")
     public List<Long> fetchRecipeIdByTagId(@RequestParam("tag_id") Long tagId) {
-        System.out.println("Haha " + recipeService.findRecipeIdByTagId(tagId));
         return recipeService.findRecipeIdByTagId(tagId);
     }
 
