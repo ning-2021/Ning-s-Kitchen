@@ -19,10 +19,10 @@ const RecipeMain: React.FC = () => {
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
 
+    // fetch all recipes and random picked recipes for "recipes of today" section
     const fetchRecipes = async () => {
         try {
             const responseAllRecipes = await axios.get<Recipe[]>('http://localhost:8080/recipes');
-
             const tagIds = (process.env.TAG_IDS as string).split(",");
             const promiseArray_RecipeIdsOfTheTagId = tagIds.map(async (tagId) => {
                 const responseOfRecipeIdsOfTheTagId = await axios.get<number[]>(`http://localhost:8080/recipes/ids?tag_id=${tagId}`);
@@ -61,7 +61,7 @@ const RecipeMain: React.FC = () => {
                 if ((now.getDate() !== lastUpdate.getDate() && now.getHours() >= 6) ||
                     (now.getDate() === lastUpdate.getDate() && now.getHours() >= 6 && lastUpdate.getHours() < 6)) {
                     const { allRecipes, randomRecipes } = await fetchRecipes();
-                    // store the new recipes and the current timestamp
+                    // store the updated random recipes and the current timestamp
                     localStorage.setItem(localStorageKey, JSON.stringify({
                         timestamp: now.toISOString(),
                         randomRecipes
