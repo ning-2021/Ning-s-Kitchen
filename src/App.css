@@ -50,13 +50,12 @@
     display: flex;
     flex-direction: column;
     gap: 10px;
-    height: 100%;
-    overflow-y: auto;
+    height: 93%;
 }
 
 .recipe-of-today .random-recipe-image {
     width: 100%;
-    height: calc(100% / 3);
+    height: calc(100% / 4);
     object-fit: cover;
     cursor: pointer;
     transition: opacity 0.3s ease;

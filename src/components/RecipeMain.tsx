@@ -57,10 +57,11 @@ const RecipeMain: React.FC = () => {
 
             try {
                 const { allRecipes, randomRecipes } = await fetchRecipes();
+                // check if we need to update random recipes
+                const shouldUpdate = (now.getDate() !== lastUpdate.getDate() && now.getHours() >= 6) ||
+                                     (now.getDate() === lastUpdate.getDate() && now.getHours() >= 6 && lastUpdate.getHours() < 6);
                 // update random recipes selection at 6am every day
-                if ((now.getDate() !== lastUpdate.getDate() && now.getHours() >= 6) ||
-                    (now.getDate() === lastUpdate.getDate() && now.getHours() >= 6 && lastUpdate.getHours() < 6)) {
-                    const { allRecipes, randomRecipes } = await fetchRecipes();
+                if (shouldUpdate) {
                     // store the updated random recipes and the current timestamp
                     localStorage.setItem(localStorageKey, JSON.stringify({
                         timestamp: now.toISOString(),
@@ -70,7 +71,7 @@ const RecipeMain: React.FC = () => {
                 setRecipeState(prevState => ({
                     ...prevState,
                     allRecipes,
-                    randomRecipes
+                    randomRecipes: shouldUpdate ? randomRecipes : (storedData.randomRecipes || randomRecipes)
                 }));
             } catch (err) {
                 setError((err as Error).message);
