@@ -2,12 +2,14 @@ package org.example.controller;
 
 import org.example.model.Recipe;
 import org.example.service.RecipeService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.List;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin
 @RequestMapping
 public class RecipeController {
     private final RecipeService recipeService;
@@ -30,6 +32,14 @@ public class RecipeController {
         return recipeService.findAllRecipes();
     }
 
+    @Value("${TAG_IDS}")
+    private String tagIds;
+    @GetMapping("/today-recipes")
+    public List<Recipe> fetchTodayRecipes() {
+        List<String> tagIdList = Arrays.asList(tagIds.split(","));
+        return recipeService.findTodayRecipes(tagIdList);
+    }
+
     @PostMapping
     public int postRecipe(@RequestBody Recipe recipe) {
         return recipeService.addRecipe(recipe);
@@ -44,5 +54,4 @@ public class RecipeController {
     public int dropRecipe(@PathVariable Long id) {
         return recipeService.removeRecipe(id);
     }
-
 }

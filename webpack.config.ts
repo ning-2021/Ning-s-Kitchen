@@ -13,7 +13,7 @@ const definePlugin = new webpack.DefinePlugin({
 });
 
 const config: webpack.Configuration = {
-  mode: 'development',
+  mode: 'production',
   entry: './src/index.tsx',
   output: {
     path: path.resolve(__dirname, 'dist'),

@@ -19,23 +19,14 @@ const RecipeMain: React.FC = () => {
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
 
-    // fetch all recipes and random picked recipes for "recipes of today" section
+    // fetch all recipes and recipes for "recipes of today" section
     const fetchRecipes = async () => {
         try {
-            const responseAllRecipes = await axios.get<Recipe[]>('http://localhost:8080/recipes');
-            const tagIds = (process.env.TAG_IDS as string).split(",");
-            const promiseArray_RecipeIdsOfTheTagId = tagIds.map(async (tagId) => {
-                const responseOfRecipeIdsOfTheTagId = await axios.get<number[]>(`http://localhost:8080/recipes/ids?tag_id=${tagId}`);
-                const recipeIdsOfTheTagId = responseOfRecipeIdsOfTheTagId.data;
-                // pick a random recipe id and get its recipe info
-                const randomRecipeIdByTagId = recipeIdsOfTheTagId[Math.floor(Math.random() * recipeIdsOfTheTagId.length)];
-                const responseOfRandomRecipeByTagId = await axios.get<Recipe>(`http://localhost:8080/recipes/${randomRecipeIdByTagId}`);
-                return responseOfRandomRecipeByTagId.data;
-            });
-            const randomRecipeIdsOfTheTagIdArray = await Promise.all(promiseArray_RecipeIdsOfTheTagId);
+            const responseAllRecipes = await axios.get<Recipe[]>(`http://${process.env.HOST}:${process.env.PORT}/recipes`);
+            const responseRecipesOfToDay = await axios.get<Recipe[]>(`http://${process.env.HOST}:${process.env.PORT}/today-recipes`);
             return {
                 allRecipes: responseAllRecipes.data,
-                randomRecipes: randomRecipeIdsOfTheTagIdArray
+                randomRecipes: responseRecipesOfToDay.data
             };
         } catch (err) {
           throw new Error((err as Error).message);
@@ -44,34 +35,12 @@ const RecipeMain: React.FC = () => {
 
     useEffect(() => {
         const updateRecipes = async () => {
-            const now = new Date();
-            const localStorageKey = 'selectedRecipes';
-            const storedData = JSON.parse(localStorage.getItem(localStorageKey) || '{}');
-            const lastUpdate = new Date(storedData.timestamp || 0);
-            console.log("last update time: " + lastUpdate);
-            console.log("current time: " + now);
-            console.log("last update date: " + lastUpdate.getDate());
-            console.log("current date: " + now.getDate());
-            console.log("last update hour: " + lastUpdate.getHours());
-            console.log("current hour: " + now.getHours());
-
             try {
                 const { allRecipes, randomRecipes } = await fetchRecipes();
-                // check if we need to update random recipes
-                const shouldUpdate = (now.getDate() !== lastUpdate.getDate() && now.getHours() >= 6) ||
-                                     (now.getDate() === lastUpdate.getDate() && now.getHours() >= 6 && lastUpdate.getHours() < 6);
-                // update random recipes selection at 6am every day
-                if (shouldUpdate) {
-                    // store the updated random recipes and the current timestamp
-                    localStorage.setItem(localStorageKey, JSON.stringify({
-                        timestamp: now.toISOString(),
-                        randomRecipes
-                    }));
-                }
                 setRecipeState(prevState => ({
                     ...prevState,
                     allRecipes,
-                    randomRecipes: shouldUpdate ? randomRecipes : (storedData.randomRecipes || randomRecipes)
+                    randomRecipes
                 }));
             } catch (err) {
                 setError((err as Error).message);

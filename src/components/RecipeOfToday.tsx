@@ -12,6 +12,7 @@ interface ImageObject {
 
 const RecipeOfToday: React.FC<RecipeOfTodayProps> = (props) => {
     const {recipesOfToday} = props;
+    console.log(recipesOfToday);
     const images: ImageObject[] = recipesOfToday.map((recipe: Recipe): ImageObject => {
             return {
                 id: recipe.id,
