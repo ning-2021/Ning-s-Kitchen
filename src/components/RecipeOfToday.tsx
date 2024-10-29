@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import Recipe from './Recipe';
 
 interface RecipeOfTodayProps {
@@ -8,24 +8,51 @@ interface RecipeOfTodayProps {
 interface ImageObject {
     id: number;
     url: string;
+    label: string
 }
+
+interface LabelRange {
+    label: string;
+    startHour: number;
+    endHour: number;
+}
+
+const labelRange: LabelRange[] = [
+    {label: "Breakfast", startHour: 6, endHour: 10},
+    {label: "Lunch", startHour: 12, endHour: 14},
+    {label: "Dinner", startHour: 16, endHour: 21}
+];
 
 const RecipeOfToday: React.FC<RecipeOfTodayProps> = (props) => {
     const {recipesOfToday} = props;
-    console.log(recipesOfToday);
-    const images: ImageObject[] = recipesOfToday.map((recipe: Recipe): ImageObject => {
+    const images: ImageObject[] = recipesOfToday.map((recipe: Recipe, index: number): ImageObject => {
             return {
                 id: recipe.id,
-                url: recipe.image
+                url: recipe.image,
+                label: labelRange[index]?.label ?? "Snack"
             }
     });
 
-    const [mainImage, setMainImage] = useState(images[0]);
+    // get the image based on time
+    const getImageByTime = (): ImageObject => {
+        const currentHour = new Date().getHours();
+        const currentLabelObj = labelRange.find(time => currentHour >= time.startHour && currentHour < time.endHour);
+        return currentLabelObj ? images[labelRange.indexOf(currentLabelObj)] : images[images.length - 1];
+    }
+
+    const [mainImage, setMainImage] = useState(getImageByTime);
     const handleThumbnailClick = (image: ImageObject) => setMainImage(image);
+    // update main image every minute to check for time changes
+    useEffect( () => {
+        const interval = setInterval( () => {
+            setMainImage(getImageByTime());
+        }, 60000);
+        return () => clearInterval(interval);
+    }, []);
 
     return (
         <div className="recipe-of-today">
-            <h2>Recipe Of Today</h2>
+            <h2>Today's Recipes</h2>
             <div className="display-container">
                 <div className="main-image-container">
                     <img
@@ -36,13 +63,16 @@ const RecipeOfToday: React.FC<RecipeOfTodayProps> = (props) => {
                 </div>
                 <div className="thumbnail-image-container">
                     {images.map((image: ImageObject) => (
-                        <img
-                            key={image.id}
-                            src={image.url}
-                            alt={`Recipe ${image.id}`}
-                            className="random-recipe-image"
-                            onClick={() => handleThumbnailClick(image)}
-                        />
+                        <div key={image.id} className="thumbnail-wrapper">
+                            <img
+                                key={image.id}
+                                src={image.url}
+                                alt={`Recipe ${image.id}`}
+                                className="random-recipe-image"
+                                onClick={() => handleThumbnailClick(image)}
+                            />
+                            <div className="meal-label">{image.label}</div>
+                        </div>
                     ))}
                 </div>
             </div>
