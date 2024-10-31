@@ -84,3 +84,34 @@
     font-size: 0.8rem;
 }
 
+.navbar {
+    background-color: #006E33;
+    padding: 1rem;
+    width: 100%;
+}
+
+.navbar-links {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    gap: 2rem;
+}
+
+.navbar-links li {
+    padding: 0;
+}
+
+.navbar-links a {
+    color: white;
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    transition: all 0.3s ease;
+}
+
+.navbar-links a:hover {
+    color: #ffd700;
+}
+
