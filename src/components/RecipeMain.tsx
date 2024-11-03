@@ -5,7 +5,7 @@ import axios from 'axios';
 
 import RecipeList from './RecipeList';
 import RecipeOfToday from './RecipeOfToday';
-import Recipe from './Recipe';
+import {Recipe} from './types';
 import Navbar from './Navbar';
 
 import MealType from '../pages/MealType';

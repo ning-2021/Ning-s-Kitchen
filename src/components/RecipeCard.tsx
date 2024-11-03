@@ -1,5 +1,5 @@
 import React from 'react';
-import Recipe from './Recipe';
+import {Recipe} from './types';
 
 const RecipeCard: React.FC<{recipe: Recipe}> = ({recipe}) => (
     <div key={recipe.id} className="recipe-card">

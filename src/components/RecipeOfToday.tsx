@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import Recipe from './Recipe';
+import {Recipe} from './types';
 
 interface RecipeOfTodayProps {
     recipesOfToday: Recipe[];
