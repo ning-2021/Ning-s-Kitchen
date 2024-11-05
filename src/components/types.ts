@@ -11,7 +11,7 @@ export interface Recipe {
 
 export interface DropdownItem {
     id: number;
-    label: string;
+    name: string;
     href: string
 }
 

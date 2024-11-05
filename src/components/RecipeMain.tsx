@@ -10,7 +10,7 @@ import Navbar from './Navbar';
 
 import MealType from '../pages/MealType';
 import FoodCategories from '../pages/FoodCategories';
-import CookingMethods from '../pages/CookingMethods';
+import CookingMethod from '../pages/CookingMethod';
 import Flavor from '../pages/Flavor';
 import Cuisine from '../pages/Cuisine';
 import DietaryRestriction from '../pages/DietaryRestriction';
@@ -82,9 +82,9 @@ const RecipeMain: React.FC = () => {
                     } />
                     <Route path="/meal-type" element={<MealType />} />
                     <Route path="/food-categories" element={<FoodCategories />} />
-                    <Route path="/cooking-methods" element={<CookingMethods />} />
+                    <Route path="/cooking-method" element={<CookingMethod />} />
                     <Route path="/flavor" element={<Flavor />} />
-                    <Route path="/cuisines" element={<Cuisine />} />
+                    <Route path="/cuisine" element={<Cuisine />} />
                     <Route path="/dietary-restriction" element={<DietaryRestriction />} />
                     <Route path="/skill-level" element={<SkillLevel />} />
                 </Routes>
