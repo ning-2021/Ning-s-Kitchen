@@ -85,12 +85,11 @@
 }
 
 .navbar {
-    background-color: #006E33;
-    padding: 1rem;
     width: 100%;
 }
 
 .navbar-links {
+    background-color: #006E33;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -98,6 +97,7 @@
     margin: 0;
     padding: 0;
     gap: 2rem;
+    position: relative;
 }
 
 .navbar-links li {
@@ -115,3 +115,17 @@
     color: #ffd700;
 }
 
+.dropdown {
+    background-color: #006E33;
+    list-style: none;
+    position: absolute;
+    top: 100%;
+    z-index: 1;
+    padding-left: 0;
+    margin: 0
+}
+
+.dropdown li a {
+    text-align: center;
+    display: block;
+}

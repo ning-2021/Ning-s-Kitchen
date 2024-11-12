@@ -80,12 +80,9 @@ public class RecipeService {
     public List<Recipe> findTodayRecipes(List<String> tagIdList) {
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime sixAmToday = now.withHour(6).withMinute(0).withSecond(0).withNano(0);
-        System.out.println("NOW: " + now);
-        System.out.println("SIXAMTODAY: " + sixAmToday);
 
         // case 1: first time loading
         if (todayRecipes == null || lastUpdate == null) {
-            System.out.println("This is the first time loading!");
             // no matter it's before today's 6AM or not,
             // we need to update the last update time to the current time and
             // set todayRecipes
@@ -95,7 +92,6 @@ public class RecipeService {
 
         // case 2: if current time is before today's 6AM
         if (now.isBefore(sixAmToday)) {
-            System.out.println("Current time is before 6am today!");
             // show yesterday's recipes
             if (lastUpdate.isBefore(sixAmToday.minusDays(1))) {
                 // last visit was more than a day ago, generate yesterday's recipes by using current timestamp as it's still before today's 6AM
@@ -106,7 +102,6 @@ public class RecipeService {
 
         // case 3: if current time is exactly or after 6AM today
         if (now.isAfter(sixAmToday) || now.equals(sixAmToday)) {
-            System.out.println("Current time is exactly or after 6am today!! Last update time is: " + lastUpdate);
             // if last update was before 6AM today, generate new recipes
             if (lastUpdate.isBefore(sixAmToday)) {
                 lastUpdate = now;
