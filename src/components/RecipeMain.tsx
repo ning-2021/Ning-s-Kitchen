@@ -5,17 +5,8 @@ import axios from 'axios';
 
 import RecipeList from './RecipeList';
 import RecipeOfToday from './RecipeOfToday';
-import {Recipe} from './types';
+import { Recipe } from './types';
 import Navbar from './Navbar';
-
-import MealType from '../pages/MealType';
-import FoodCategories from '../pages/FoodCategories';
-import CookingMethod from '../pages/CookingMethod';
-import Flavor from '../pages/Flavor';
-import Cuisine from '../pages/Cuisine';
-import DietaryRestriction from '../pages/DietaryRestriction';
-import SkillLevel from '../pages/SkillLevel';
-
 
 const RecipeMain: React.FC = () => {
     interface RecipeState {
@@ -34,14 +25,14 @@ const RecipeMain: React.FC = () => {
     // fetch all recipes and recipes for "recipes of today" section
     const fetchRecipes = async () => {
         try {
-            const responseAllRecipes = await axios.get<Recipe[]>(`http://${process.env.HOST}:${process.env.PORT}/recipes`);
-            const responseRecipesOfToDay = await axios.get<Recipe[]>(`http://${process.env.HOST}:${process.env.PORT}/today-recipes`);
+            const responseAllRecipes = await axios.get<Recipe[]>(`/api/recipes`);
+            const responseRecipesOfToDay = await axios.get<Recipe[]>(`/api/today-recipes`);
             return {
                 allRecipes: responseAllRecipes.data,
                 randomRecipes: responseRecipesOfToDay.data
             };
         } catch (err) {
-          throw new Error((err as Error).message);
+            throw new Error((err as Error).message);
         }
     }
 
@@ -80,13 +71,6 @@ const RecipeMain: React.FC = () => {
                             <RecipeList title="Newest Recipes" recipes={newestRecipes} />
                         </>
                     } />
-                    <Route path="/meal-type" element={<MealType />} />
-                    <Route path="/food-categories" element={<FoodCategories />} />
-                    <Route path="/cooking-method" element={<CookingMethod />} />
-                    <Route path="/flavor" element={<Flavor />} />
-                    <Route path="/cuisine" element={<Cuisine />} />
-                    <Route path="/dietary-restriction" element={<DietaryRestriction />} />
-                    <Route path="/skill-level" element={<SkillLevel />} />
                 </Routes>
             </BrowserRouter>
         </div>

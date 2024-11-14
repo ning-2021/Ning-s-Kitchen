@@ -11,7 +11,7 @@ const Navbar: React.FC = () => {
 
     const fetchNavItems = async() => {
         try {
-            const response = await axios.get<NavItem[]>(`http://${process.env.HOST}:${process.env.PORT}/navbarItems`);
+            const response = await axios.get<NavItem[]>('/api/navbarItems');
             // transform the API data to match the NavItem interface
             const transformedNavItems: NavItem[] = response.data.map(item => {
                 const parentHref = `/${item.name.toLowerCase().replace(/\s+/g, '-')}`;

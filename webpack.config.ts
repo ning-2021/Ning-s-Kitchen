@@ -6,6 +6,8 @@ import dotenv from 'dotenv';
 
 // Load environment variables from .env file
 const env = dotenv.config().parsed;
+const host = process.env.HOST;
+const port = process.env.PORT;
 
 // Create a new Webpack define plugin
 const definePlugin = new webpack.DefinePlugin({
@@ -32,6 +34,12 @@ const config: webpack.Configuration = {
     compress: true,
     port: 3000,
     historyApiFallback: true,
+    proxy: [{
+        context: ['/api'],
+        target: `http://${host}:${port}`,
+        changeOrigin: true,
+        secure: false
+    }],
   },
   resolve: {
     extensions: ['.ts', '.tsx', '.js'],
