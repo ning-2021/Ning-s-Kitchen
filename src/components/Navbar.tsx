@@ -36,24 +36,25 @@ const Navbar: React.FC = () => {
         fetchNavItems();
     }, []);
 
-    const handleMouseEnter = (navItemId: number) => {
+    const handleMouseEnter = (navItemId: number): void => {
         setActiveDropdown(navItemId);
+        console.log(navItemId);
     };
 
-    const handleMouseLeave = () => {
+    const handleMouseLeave = (): void => {
         setActiveDropdown(null);
-    };
+    }
 
     return (
         <nav className="navbar">
             <ul className="navbar-links">
                 <Link to={"/"}>Home</Link>
-                {navItems.map((item) => (
-                    <li key={item.id} onMouseEnter={() => handleMouseEnter(item.id)} onMouseLeave={handleMouseLeave}>
-                        <Link to={item.href}>{item.name}</Link>
-                        {activeDropdown === item.id && item.dropdownItems && item.dropdownItems.length > 0 && (
+                {navItems.map(navItem => (
+                    <li key={navItem.id} onMouseEnter={() => handleMouseEnter(navItem.id)} onMouseLeave={() => handleMouseLeave()}>
+                        <Link to={navItem.href}>{navItem.name}</Link>
+                        {activeDropdown === navItem.id && navItem.dropdownItems && navItem.dropdownItems.length > 0 && (
                             <ul className="dropdown">
-                                {item.dropdownItems.map((dropdownItem) => (
+                                {navItem.dropdownItems.map(dropdownItem => (
                                     <li key={dropdownItem.id}>
                                         <Link to={dropdownItem.href}>{dropdownItem.name}</Link>
                                     </li>
@@ -68,4 +69,3 @@ const Navbar: React.FC = () => {
 };
 
 export default Navbar;
-

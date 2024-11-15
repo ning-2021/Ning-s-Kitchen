@@ -113,6 +113,7 @@
 
 .navbar-links a:hover {
     color: #ffd700;
+    display: block
 }
 
 .dropdown {
