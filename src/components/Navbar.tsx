@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import { NavItem, DropdownItem } from './types';
+import { Link } from 'react-router-dom';
 import dotenv from 'dotenv';
 import axios from 'axios';
+import Dropdown from './Dropdown';
 
 const Navbar: React.FC = () => {
     const [navItems, setNavItems] = useState<NavItem[]>([]);
@@ -38,7 +39,6 @@ const Navbar: React.FC = () => {
 
     const handleMouseEnter = (navItemId: number): void => {
         setActiveDropdown(navItemId);
-        console.log(navItemId);
     };
 
     const handleMouseLeave = (): void => {
@@ -50,17 +50,8 @@ const Navbar: React.FC = () => {
             <ul className="navbar-links">
                 <Link to={"/"}>Home</Link>
                 {navItems.map(navItem => (
-                    <li key={navItem.id} onMouseEnter={() => handleMouseEnter(navItem.id)} onMouseLeave={() => handleMouseLeave()}>
-                        <Link to={navItem.href}>{navItem.name}</Link>
-                        {activeDropdown === navItem.id && navItem.dropdownItems && navItem.dropdownItems.length > 0 && (
-                            <ul className="dropdown">
-                                {navItem.dropdownItems.map(dropdownItem => (
-                                    <li key={dropdownItem.id}>
-                                        <Link to={dropdownItem.href}>{dropdownItem.name}</Link>
-                                    </li>
-                                ))}
-                            </ul>
-                        )}
+                    <li key={navItem.id} onMouseOver={() => handleMouseEnter(navItem.id)} onMouseLeave={() => handleMouseLeave()}>
+                        <Dropdown navItem={navItem} activeDropdown={activeDropdown}/>
                     </li>
                 ))}
             </ul>
@@ -69,3 +60,4 @@ const Navbar: React.FC = () => {
 };
 
 export default Navbar;
+
