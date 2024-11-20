@@ -9,6 +9,7 @@ const Navbar: React.FC = () => {
     const [navItems, setNavItems] = useState<NavItem[]>([]);
     const [error, setError] = useState<string | null>(null);
     const [activeDropdown, setActiveDropdown] = useState<number | null>(null);
+    const [selectedTags, setSelectedTags] = useState<number[]>([]);
 
     const fetchNavItems = async() => {
         try {
@@ -51,7 +52,7 @@ const Navbar: React.FC = () => {
                 <Link to={"/"}>Home</Link>
                 {navItems.map(navItem => (
                     <li key={navItem.id} onMouseOver={() => handleMouseEnter(navItem.id)} onMouseLeave={() => handleMouseLeave()}>
-                        <Dropdown navItem={navItem} activeDropdown={activeDropdown}/>
+                        <Dropdown navItem={navItem} activeDropdown={activeDropdown} selectedTags={selectedTags} setSelectedTags={setSelectedTags}/>
                     </li>
                 ))}
             </ul>
