@@ -36,6 +36,14 @@ const Navbar: React.FC = () => {
 
     useEffect(() => {
         fetchNavItems();
+        // store the selected tags from the existing url after refreshing the page
+        const params = new URLSearchParams(window.location.search);
+        const selectedTagsParam = params.get('selected');
+        if (selectedTagsParam) {
+            const restoredTagsArray = selectedTagsParam.split("|").map(Number);
+            console.log("restored tags array from last time: ", restoredTagsArray);
+            setSelectedTags(restoredTagsArray);
+        }
     }, []);
 
     const handleMouseEnter = (navItemId: number): void => {
