@@ -4,6 +4,7 @@ import org.example.dao.RecipeDAOImpl;
 import org.example.model.Recipe;
 import org.springframework.stereotype.Service;
 
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.ArrayList;
@@ -112,4 +113,7 @@ public class RecipeService {
         return todayRecipes;
     }
 
+    public List<Recipe> findRecipesBySelectedTags(List<Integer> tagIdsArrayNum) throws SQLException {
+        return recipeDAOImpl.getRecipesBySelectedTags(tagIdsArrayNum);
+    }
 }
