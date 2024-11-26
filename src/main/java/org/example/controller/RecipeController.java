@@ -42,7 +42,7 @@ public class RecipeController {
         return recipeService.findTodayRecipes(tagIdList);
     }
 
-    @GetMapping("/tags-selected")
+    @GetMapping("/tags")
     public List<Recipe> getQueryParameters(@RequestParam("selected") String selectedTags) throws SQLException {
         System.out.println("selectedTags: " + selectedTags);
         String[] tagIdsArrayStr = selectedTags.split("\\|");
