@@ -11,7 +11,7 @@ import java.util.List;
 
 @RestController
 @CrossOrigin
-@RequestMapping
+@RequestMapping("/api")
 public class NavController {
     private final NavService navService;
     public NavController(NavService navService) {

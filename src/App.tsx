@@ -1,12 +1,12 @@
 import React from 'react';
 import RecipeMain from './components/RecipeMain';
+import {BrowserRouter} from 'react-router-dom';
 
 const App = () => {
   return (
-    <div>
-      <h1>Hello</h1>
-      <RecipeMain />
-    </div>
+      <BrowserRouter>
+        <RecipeMain />
+      </BrowserRouter>
   );
 };
 
