@@ -7,15 +7,17 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 @Repository
 public class RecipeDAOImpl implements RecipeDAO {
+    private static final String sqlPath = "src/main/resources/sqlFiles/get_intersected_recipe_ids.sql";
     JdbcTemplate jdbc;
 
     public RecipeDAOImpl(DataSource dataSource) {
@@ -52,20 +54,25 @@ public class RecipeDAOImpl implements RecipeDAO {
         return jdbc.update(insertRecipeSql, recipe.getTitle(), recipe.getDescription(), recipe.getInstructions(), recipe.getRating(), recipe.getImage(), recipe.getDuration());
     }
 
-    public List<Recipe> getRecipesBySelectedTags(List<Integer> tagIds) throws SQLException {
-        StringBuilder sb = new StringBuilder("SELECT * FROM recipes_tags WHERE tag_id IN (");
-        for (int i = 0; i < tagIds.size() - 1; i++) {
-            sb.append("?, ");
-        }
-        sb.append("?)");
-
+    private void executeSqlFile() {
         try (Connection conn = TestConnect.dataSource().getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sb.toString())) {
-            for (int i = 0; i < tagIds.size(); i++) {
-                pstmt.setInt(i+1, tagIds.get(i));
-            }
+             Statement stmt = conn.createStatement()) {
+            String sqlString = new String(Files.readAllBytes(Paths.get(sqlPath)), Charset.forName("UTF-8"));
+            stmt.execute(sqlString);
+        } catch (IOException | SQLException e) {
+            throw new RuntimeException("Failed to create SQL function", e);
+        }
+    }
+
+    public List<Recipe> getRecipesBySelectedTags(List<Integer> tagIds) throws SQLException {
+        List<Recipe> recipeList = new ArrayList<>();
+        String sql = "SELECT get_intersected_recipe_ids(?) AS result";
+        try (Connection conn = TestConnect.dataSource().getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            executeSqlFile();
+            Array sqlArray = conn.createArrayOf("INTEGER", tagIds.toArray());
+            pstmt.setArray(1, sqlArray);
             ResultSet rs = pstmt.executeQuery();
-            List<Recipe> recipeList = new ArrayList<>();
             while (rs.next()) {
                 Long recipeId = rs.getLong("recipe_id");
                 recipeList.add(getRecipeById(recipeId));
