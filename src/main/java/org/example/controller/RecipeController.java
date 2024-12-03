@@ -44,14 +44,11 @@ public class RecipeController {
 
     @GetMapping("/tags")
     public List<Recipe> getQueryParameters(@RequestParam("selected") String selectedTags) throws SQLException {
-        System.out.println("selectedTags: " + selectedTags);
         String[] tagIdsArrayStr = selectedTags.split("\\|");
         List<Integer> tagIdsArrayNum = new ArrayList<>();
         for (String tagIdStr: tagIdsArrayStr) {
             tagIdsArrayNum.add(Integer.parseInt(tagIdStr));
         }
-        System.out.println("tag IDs: " + tagIdsArrayNum);
-
         return recipeService.findRecipesBySelectedTags(tagIdsArrayNum);
     }
 

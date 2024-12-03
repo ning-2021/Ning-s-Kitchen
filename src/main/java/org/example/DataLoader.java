@@ -140,7 +140,7 @@ public class DataLoader {
     }
 
     public static void main(String[] args) {
-        executeSqlSchema("src/main/resources/schema.sql");
+        executeSqlSchema("src/main/resources/sqlFiles/schema.sql");
         primaryKeys();
         loadCsvToTable("src/main/resources/data/recipes.csv", "recipes", RecipeCols.values());
         loadCsvToTable("src/main/resources/data/categories.csv", "categories", CategoryCols.values());

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import javax.sql.DataSource;
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.sql.*;
@@ -57,7 +58,7 @@ public class RecipeDAOImpl implements RecipeDAO {
     private void executeSqlFile() {
         try (Connection conn = TestConnect.dataSource().getConnection();
              Statement stmt = conn.createStatement()) {
-            String sqlString = new String(Files.readAllBytes(Paths.get(sqlPath)), Charset.forName("UTF-8"));
+            String sqlString = new String(Files.readAllBytes(Paths.get(sqlPath)), StandardCharsets.UTF_8);
             stmt.execute(sqlString);
         } catch (IOException | SQLException e) {
             throw new RuntimeException("Failed to create SQL function", e);
@@ -74,8 +75,13 @@ public class RecipeDAOImpl implements RecipeDAO {
             pstmt.setArray(1, sqlArray);
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
-                Long recipeId = rs.getLong("recipe_id");
-                recipeList.add(getRecipeById(recipeId));
+                Array sqlResultArray = rs.getArray("result");
+                if (sqlResultArray != null) {
+                    Long[] recipe_ids = (Long[]) sqlResultArray.getArray();
+                    for (Long recipe_id: recipe_ids) {
+                        recipeList.add(getRecipeById(recipe_id));
+                    }
+                }
             }
             return recipeList;
         } catch (SQLException e) {

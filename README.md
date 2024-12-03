@@ -11,7 +11,7 @@ Discover and explore personalized recipes tailored to your taste!
 
 ## Project Overview
 
-**Ning's Kitchen** is a responsive recipe website designed to provide users with a seamless and engaging experience in discovering and managing recipes. The application is built with a Java Spring Boot backend and a PostgreSQL database, ensuring robust data management. The frontend is developed using React and TypeScript, offering a modern and interactive user experience.
+**Ning's Kitchen** is a responsive recipe website designed to provide users with a seamless and engaging experience in discovering and managing recipes. The application is built with a Java Spring Boot backend and a PostgreSQL database utilizing PL/pgSQL for stored procedures and functions, ensuring robust data management. The frontend is developed using React and TypeScript, offering a modern and interactive user experience.
 Further development is underway to enhance the website's functionality and user experience, with plans to introduce more features and improvements.
 
 ## Disclaimer
